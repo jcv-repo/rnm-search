@@ -30,8 +30,6 @@ const SearchFormResults = ({ searchQuery, setSearchQuery }) => {
           results.nextUrl = data.info.next;
 
           setSearchResults(results);
-        } else {
-          console.log(`error ${response.status}, try again`);
         }
       })();
     }
