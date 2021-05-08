@@ -1,0 +1,141 @@
+$headerLight: #f4f4f4;
+
+@media (min-width: 960px) {
+  #welcome {
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+    width: 100%;
+    height: 90vh;
+    padding-bottom: 10vh;
+  }
+
+  #welcome {
+    #logo-container {
+      margin-bottom: 1em;
+    }
+  }
+
+  #header {
+    display: flex;
+    height: 4em;
+    padding-top: 1em;
+    background-color: $headerLight;
+  }
+
+  #header {
+    #logo-container {
+      width: 10rem;
+      padding: 0.5em 0;
+    }
+
+    #logo-container img {
+      width: auto;
+      max-height: 100%;
+      margin: 0 auto;
+    }
+
+    #search-container {
+      padding: 0.5em 0;
+    }
+  }
+
+  #search-results {
+    margin-top: 1em;
+  }
+
+  #search-results {
+    > ul {
+      padding: 0;
+      margin-left: 10rem;
+    }
+
+    > ul > li {
+      display: block;
+      max-width: 540px;
+      padding: 0;
+      margin: 0;
+    }
+
+    > ul > #selected-result {
+      max-width: none;
+      margin-left: -10rem;
+    }
+
+    > ul > li > span {
+      display: block;
+    }
+  }
+
+  .character-item {
+    display: flex;
+    padding: 2em 1em 2em 0;
+    border-bottom: solid 1px #cccccc;
+    cursor: pointer;
+  }
+
+  .character-item {
+    img {
+      width: 6em;
+      height: auto;
+    }
+
+    .description {
+      padding-left: 3em;
+    }
+
+    .description {
+      h3 {
+        margin-bottom: 0;
+      }
+
+      ul {
+        padding: 0;
+      }
+
+      ul > li {
+        list-style-type: none;
+      }
+
+      ul > {
+        .name {
+          font-size: 1.5em;
+        }
+
+        .species {
+          display: inline;
+        }
+
+        .species::after {
+          content: "·";
+          display: inline-block;
+          padding: 0 0.5em;
+          font-weight: bold;
+        }
+
+        .status {
+          display: inline;
+          font-weight: bold;
+        }
+      }
+    }
+  }
+
+  #character-box {
+    display: flex;
+    position: relative;
+    width: calc(100% - 10rem);
+    padding: 1em 0;
+    padding-left: 10rem;
+  }
+
+  #character-box {
+    #close-charbox {
+      font-size: 3em;
+      position: absolute;
+      top: 2em;
+      right: 2em;
+    }
+  }
+}
