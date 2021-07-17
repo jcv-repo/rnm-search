@@ -1,58 +1,27 @@
-import { useState, useRef, useEffect } from "react";
+import { useState, useEffect } from "react";
 import { useLocation } from "react-router-dom";
-import { getUrlParams, getNewParamsString } from "../helpers/getUrlParams";
+import { getUrlParams } from "../helpers/GetUrlParams";
 import SearchFormHeader from "./SearchFormHeader";
 import SearchFormResults from "./SearchFormResults";
+import "../styles/search.scss";
 
 const SearchForm = () => {
-  var getInitialQueryState = () => {
-    const urlParams = getUrlParams() || {};
-    const state = {
-      query: urlParams.q ? urlParams.q : null,
-      character: urlParams.character ? urlParams.character : null,
-    };
-
-    return state;
-  };
-
-  const [searchQuery, setSearchQuery] = useState(getInitialQueryState());
+  const params = getUrlParams() || {};
+  const getStateFromParams = () => ({
+    query: params.q || null,
+    character: params.character || null,
+  });
+  const [searchQuery, setSearchQuery] = useState(getStateFromParams());
   const location = useLocation();
 
-  /* 
-	useEffect(() => {
-		
-		if (firstUpdate.current) {
-			firstUpdate.current = false;
-			return;
-		};
-    
-    
-		if ( searchQuery.query && searchQuery.query != getUrlParams('q') ||
-		searchQuery.character != getUrlParams('character') ) {
-			history.push({ search : getNewParamsString({ 
-				q : searchQuery.query, character : searchQuery.character }) 
-			});
-    };
-    
-    
-  }, [ searchQuery ]);	// previously [searchQuery, history]
-	*/
-
   useEffect(() => {
-    const urlParams = getUrlParams() || {};
-
+    console.log(params);
     if (
-      searchQuery.query != urlParams.q ||
-      searchQuery.character != urlParams.character
+      params.q != searchQuery.query ||
+      params.character != searchQuery.character
     ) {
-      setSearchQuery({
-        ...searchQuery,
-        query: urlParams.q,
-        character: urlParams.character,
-      });
+      setSearchQuery(getStateFromParams());
     }
-
-    console.log(searchQuery.query);
   }, [location]);
 
   return (

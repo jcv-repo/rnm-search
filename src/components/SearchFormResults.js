@@ -1,80 +1,124 @@
 import { useState, useEffect } from "react";
+import { Route } from "react-router";
+import {
+  getCharacterResults,
+  getCharacterResultsWithQuery,
+  getRickAndMortyEpisodes,
+  getEpisodeNumber,
+} from "../helpers/ApiHandlers";
 import CharacterBox from "./CharacterBox";
 import CharacterItem from "./CharacterItem";
 
 const SearchFormResults = ({ searchQuery, setSearchQuery }) => {
-  const [searchResults, setSearchResults] = useState(null);
+  const [searchResults, setSearchResults] = useState({
+    query: null,
+    haveResults: false,
+    items: [],
+  });
+  const [episodeList, setEpisodeList] = useState(new Array());
+  const [searchState, setSearchState] = useState("ready");
+  const pendingTimeLimit = 7000;
 
-  const pushNextResults = async () => {
-    if (searchResults.nextUrl) {
-      const response = await fetch(searchResults.nextUrl);
+  let selectedIndex = null;
+  if (searchResults.haveResults) {
+    searchResults.items.forEach((character, index) => {
+      if (searchQuery.character == character.id) selectedIndex = index;
+    });
+  }
 
-      if (response.ok) {
-        const data = await response.json();
-        const results = [...searchResults, ...data.results];
-        results.nextUrl = data.info.next;
-        setSearchResults(results);
-      }
+  const pushNextPageResults = async () => {
+    try {
+      setSearchState("busy");
+      const newSearchResults = await getCharacterResults(
+        searchResults.nextUrl,
+        pendingTimeLimit
+      );
+      newSearchResults.items = [
+        ...searchResults.items,
+        ...newSearchResults.items,
+      ];
+
+      setSearchResults({ ...searchResults, ...newSearchResults });
+      setSearchState("ready");
+    } catch (error) {
+      setSearchState("error");
+      console.error(error.message);
     }
   };
 
-  useEffect(() => {
+  useEffect(async () => {
     if (searchQuery.query) {
-      (async () => {
-        const apiTargetUrl = `https://rickandmortyapi.com/api/character/?name=${searchQuery.query}`;
-        const response = await fetch(apiTargetUrl);
-
-        if (response.ok) {
-          const data = await response.json();
-          const results = data.results;
-          results.nextUrl = data.info.next;
-
-          setSearchResults(results);
-        }
-      })();
+      try {
+        setSearchState("busy");
+        const results = await getCharacterResultsWithQuery(
+          searchQuery.query,
+          pendingTimeLimit
+        );
+        setSearchResults(results);
+        setSearchState("ready");
+      } catch (error) {
+        setSearchState("error");
+        console.error(error.message);
+      }
     }
-  }, [searchQuery]);
+  }, [searchQuery.query]);
+
+  useEffect(async () => {
+    if (searchQuery.character) {
+      try {
+        setEpisodeList(
+          await getRickAndMortyEpisodes(
+            getEpisodeNumber(searchResults.items[selectedIndex].episode)
+          )
+        );
+      } catch (error) {
+        console.error(error.message);
+      }
+    }
+  }, [searchQuery.character]);
 
   return (
     <section id="search-results">
       {searchQuery.query ? (
-        searchResults ? (
+        searchResults.haveResults ? (
           <>
-            {searchQuery.character && (
-              <CharacterBox
-                character={searchQuery.character}
-                searchQuery={searchQuery}
-                setSearchQuery={setSearchQuery}
-              />
-            )}
-
             <ul>
-              {searchResults.map((character, index) => (
+              {searchResults.items.map((character, index) => (
                 <li
                   key={`character-${index}`}
-                  id={
-                    searchQuery.character == character.id
-                      ? "selected-result"
-                      : null
-                  }
+                  id={selectedIndex == index ? "selected-result" : null}
                 >
-                  <CharacterItem
-                    character={character}
-                    searchQuery={searchQuery}
-                    setSearchQuery={setSearchQuery}
-                  />
+                  {selectedIndex === index ? (
+                    <CharacterBox
+                      character={searchResults.items[selectedIndex]}
+                      episodeList={episodeList}
+                      searchQuery={searchQuery}
+                      setSearchQuery={setSearchQuery}
+                    />
+                  ) : (
+                    <CharacterItem
+                      character={character}
+                      index={index}
+                      searchQuery={searchQuery}
+                      setSearchQuery={setSearchQuery}
+                    />
+                  )}
                 </li>
               ))}
               {searchResults.nextUrl && (
-                <button onClick={pushNextResults}>See More</button>
+                <button onClick={pushNextPageResults}>See More</button>
               )}
             </ul>
           </>
+        ) : searchState === "ready" ? (
+          <div className="g-message">
+            <p>Your search has yielded no results. Try something different</p>
+          </div>
         ) : (
-          <span> loading? </span>
+          <span> Loading </span>
         )
       ) : (
-        "no search index"
+        "No search has been made yet"
       )}
     </section>
   );

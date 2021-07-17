@@ -1,8 +1,8 @@
 import { useState, useEffect } from "react";
 import { useHistory } from "react-router-dom";
-import { getNewParamsString } from "../helpers/getUrlParams";
+import { getNewParamsString } from "../helpers/GetUrlParams";
 
-import { ReactComponent as SearchIcon } from "../icons/search_icon.svg";
+import { ReactComponent as SearchIcon } from "../images/search_icon.svg";
 
 const SearchFormHeaderBar = ({ searchQuery, setSearchQuery }) => {
   const [userInput, setUserInput] = useState(
@@ -18,8 +18,8 @@ const SearchFormHeaderBar = ({ searchQuery, setSearchQuery }) => {
   };
 
   const indexUpdate = () => {
-    setSearchQuery({ ...searchQuery, query: userInput });
-    history.push({ search: getNewParamsString({ q: userInput }) });
+    setSearchQuery({ query: userInput });
+    history.push({ search: getNewParamsString({ q: userInput }, true) });
   };
 
   useEffect(() => {
@@ -33,7 +33,6 @@ const SearchFormHeaderBar = ({ searchQuery, setSearchQuery }) => {
         onChange={inputHandle}
         onKeyPress={inputEnterHandle}
       />
-      <SearchIcon onClick={indexUpdate} />
     </div>
   );
 };

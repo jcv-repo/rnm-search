@@ -1,53 +1,76 @@
+@import "utilities.scss";
+
+@font-face {
+  font-family: "icomoon";
+  src: url("fonts/icomoon.eot?30en");
+  src: url("fonts/icomoon.eot?30en#iefix") format("embedded-opentype"),
+    url("fonts/icomoon.ttf?30en") format("truetype"),
+    url("fonts/icomoon.woff?30en") format("woff"),
+    url("fonts/icomoon.svg?30en#icomoon") format("svg");
+  font-weight: normal;
+  font-style: normal;
+  font-display: block;
+}
+
 html {
-	font-size: 100%;
+  font-size: 100%;
 }
-
 body {
-	font-size: 1em;
-	padding: 0;
-	border: 0;
-	margin: 0;
+  font-size: 1em;
+  padding: 0;
+  border: 0;
+  margin: 0;
+  background-color: var(--background);
+  color: var(--text);
 }
-
 h3 {
-	font-size: 1.5em;
-	margin-top: 0;
+  font-size: 1.5em;
+  margin-top: 0;
 }
-
 img {
-	display: block;
+  display: block;
 }
 
 .g-searchbox {
-	display:flex;
-	border: solid 1px rgb(224, 224, 224);
-	border-radius: 0.25em;
-	background-color: white;
+  display: flex;
+  border-radius: 0.25em;
+  background-color: var(--inputBg);
+
+  input {
+    font-size: 1em;
+    width: 100%;
+    padding-left: $space-unit;
+    border: 0;
+    border-radius: 0;
+    background-color: var(--inputBg);
+    color: var(--text);
+    &:focus {
+      border: 0;
+      outline: 0;
+    }
+  }
+  &::after {
+    content: "s";
+    display: block;
+    font-size: 1em;
+    width: 1em;
+    height: $space-unit;
+    padding: $space-unit;
+    font-family: "icomoon" !important;
+    color: var(--icon);
+    cursor: pointer;
+  }
 }
 
-.g-searchbox {
-	
-	input {
-		font-size: 1em;
-		width: 100%;
-		padding-left: 1em;
-		border: 0;
-		border-radius: 0;
-	}
-	
-	input:focus {
-		border: 0;
-		outline: 0;
-	}
-	
-	svg {
-		width: 1em;
-		height: 1em;
-		padding: 1em;
-		font-size: 1em;
-		cursor: pointer;
-	}
-	
+.g-message {
+  padding: $space-unit;
+  margin: 0 0 $space-unit;
+  background-color: var(--header);
+
+  p {
+    margin-top: 0;
+    &:last-child {
+      margin-bottom: 0;
+    }
+  }
 }
-
-

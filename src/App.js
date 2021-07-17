@@ -1,11 +1,10 @@
-import Page from './components/Page';
-import './styles/global.scss'
+import { BrowserRouter as Router } from "react-router-dom";
+import Page from "./components/Page";
 
-function App() {
-  
-  return (
-  	<Page />
-  );
-};
+const App = () => (
+  <Router>
+    <Page />
+  </Router>
+);
 
 export default App;
