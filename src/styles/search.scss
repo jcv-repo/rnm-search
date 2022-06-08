@@ -53,7 +53,7 @@ $search-margin: 10rem;
     #logo-container {
       width: $search-margin;
       padding: $space-xs 0;
-      @include desktop-small-down {
+      @include mobile-down {
         width: $space-xxl;
       }
 
@@ -61,6 +61,10 @@ $search-margin: 10rem;
         width: auto;
         max-height: 100%;
         margin: 0 auto;
+        @include mobile-down {
+          width: $space-xl;
+          margin: $space-sm $space-sm 0;
+        }
       }
     }
     #search-container {
@@ -70,6 +74,9 @@ $search-margin: 10rem;
   #theme-toggle {
     margin: auto;
     margin-right: $space-md;
+    @include mobile-down {
+      margin-left: $space-sm;
+    }
   }
 }
 #search-results {
@@ -101,7 +108,10 @@ $search-margin: 10rem;
           }
           &#selected-result {
             max-width: none;
-            margin-left: -$search-margin;
+            margin-left: -$space-xxl;
+            @include mobile-down {
+              margin-left: 0;
+            }
             .results-in-two-columns & {
               width: calc(100% + 20rem);
               max-width: none;
@@ -115,6 +125,9 @@ $search-margin: 10rem;
     .g-message {
       padding-left: $search-margin;
       background-color: transparent;
+      @include mobile-down {
+        padding: $space-sm $space-xl;
+      }
     }
   }
 }
@@ -175,6 +188,9 @@ $search-margin: 10rem;
   padding: $space-lg $space-unit $space-lg 0;
   border-bottom: solid 1px #cccccc;
   cursor: pointer;
+  @include mobile-down {
+    padding-left: $space-lg;
+  }
 
   > {
     img {
@@ -225,8 +241,7 @@ $search-margin: 10rem;
   color: var(--featuredTxt);
   @include mobile-down {
     width: auto;
-    min-height: 100vh;
-    padding: 0 $space-unit;
+    padding: $space-xs $space-unit $space-xl;
     flex-direction: column;
   }
   #close-charbox {
